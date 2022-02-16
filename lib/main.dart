@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:rx_notifier/rx_notifier.dart';
+
+import 'controller.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,11 +33,24 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
-  void _incrementCounter() {
-    _counter.value++;
+  final controller = Controller();
+  // void _incrementCounter() {
+  //   controller.counter.value++;
+  // }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   controller.counter.addListener(() {
+  //     print(controller.counter.value);
+  //   });
+  // }
+  @override
+  void initState() {
+    super.initState();
+   rxObserver(() {
+      print(controller.counter.value);
+    });
   }
-
   @override
   Widget build(BuildContext context) {
 
@@ -48,18 +64,25 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             const Text(
               'You have pushed the button this many times:',
-            ),ValueListenableBuilder(valueListenable: _counter, builder:(_,__,___){
+            ),
+            RxBuilder( builder:(_){
             return Text(
-            '${_counter.value}',
+            '${controller.counter.value}',
             style: Theme.of(context).textTheme.headline4,
-      );
-            }
+                   );
+                }
+                // ValueListenableBuilder(valueListenable: controller.counter, builder:(_,__,___){
+                //   return Text(
+                //     '${controller.counter.value}',
+                //     style: Theme.of(context).textTheme.headline4,
+                //   );
+                // }
             )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: controller.incrementCounter,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
